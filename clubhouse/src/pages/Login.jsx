@@ -29,6 +29,7 @@ function Login() {
       // Store token and user data
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
+      console.log("Resgistration Successful");
 
       // Redirect to messages page
       navigate("/");
