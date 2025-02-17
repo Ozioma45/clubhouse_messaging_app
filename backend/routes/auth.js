@@ -7,6 +7,8 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
+console.log("Passcode from .env:", process.env.MEMBERSHIP_PASSCODE);
+
 const router = express.Router();
 
 // User Signup
@@ -90,6 +92,25 @@ router.post("/login", async (req, res) => {
         isAdmin: user.rows[0].is_admin,
       },
     });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Join the Club (Upgrade to Member)
+router.post("/join", verifyToken, async (req, res) => {
+  const { passcode } = req.body;
+  const userId = req.user.id;
+
+  if (passcode !== process.env.MEMBERSHIP_PASSCODE) {
+    return res.status(403).json({ message: "Incorrect passcode" });
+  }
+
+  try {
+    await pool.query("UPDATE users SET is_member = true WHERE id = $1", [
+      userId,
+    ]);
+    res.json({ message: "Welcome to the club! You are now a member." });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

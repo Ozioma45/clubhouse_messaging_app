@@ -15,6 +15,7 @@ function Messages() {
         const data = await response.json();
         setMessages(data);
       } catch (err) {
+        console.log(err);
         console.error("Error fetching messages:", err);
       }
     };
@@ -37,11 +38,22 @@ function Messages() {
     }
 
     try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("User is not authenticated.");
+        return;
+      }
+
+      console.log(
+        "Token before sending request:",
+        localStorage.getItem("token")
+      );
+
       const response = await fetch("http://localhost:5000/api/messages", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(newMessage),
       });

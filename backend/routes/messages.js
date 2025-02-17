@@ -1,10 +1,10 @@
-import express from "express";
-import pool from "../db.js";
-import {
+const express = require("express");
+const pool = require("../db.js");
+const {
   verifyToken,
   isMember,
   isAdmin,
-} from "../middleware/authMiddleware.js";
+} = require("../middleware/authMiddleware.js");
 
 const router = express.Router();
 
@@ -51,5 +51,4 @@ router.delete("/:id", verifyToken, isAdmin, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-
-export default router;
+module.exports = router;
