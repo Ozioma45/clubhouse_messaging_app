@@ -116,4 +116,23 @@ router.post("/join", verifyToken, async (req, res) => {
   }
 });
 
+// Upgrade to Admin
+router.post("/become-admin", verifyToken, async (req, res) => {
+  const { passcode } = req.body;
+  const userId = req.user.id;
+
+  if (passcode !== process.env.ADMIN_PASSCODE) {
+    return res.status(403).json({ message: "Incorrect admin passcode" });
+  }
+
+  try {
+    await pool.query("UPDATE users SET is_admin = true WHERE id = $1", [
+      userId,
+    ]);
+    res.json({ message: "You are now an admin!" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = router;

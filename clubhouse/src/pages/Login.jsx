@@ -29,7 +29,8 @@ function Login() {
       // Store token and user data
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      console.log("Resgistration Successful");
+
+      console.log("Login Successful");
 
       // Redirect to messages page
       navigate("/");
@@ -46,6 +47,7 @@ function Login() {
           type="email"
           name="email"
           placeholder="Email"
+          value={formData.email}
           onChange={handleChange}
           required
         />
@@ -53,6 +55,7 @@ function Login() {
           type="password"
           name="password"
           placeholder="Password"
+          value={formData.password}
           onChange={handleChange}
           required
         />
