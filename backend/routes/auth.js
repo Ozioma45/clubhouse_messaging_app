@@ -100,6 +100,11 @@ router.post("/login", async (req, res) => {
 // Join the Club (Upgrade to Member)
 router.post("/join", verifyToken, async (req, res) => {
   const { passcode } = req.body;
+
+  if (!req.user || !req.user.id) {
+    return res.status(403).json({ message: "Unauthorized: User not found" });
+  }
+
   const userId = req.user.id;
 
   if (passcode !== process.env.MEMBERSHIP_PASSCODE) {
@@ -107,11 +112,19 @@ router.post("/join", verifyToken, async (req, res) => {
   }
 
   try {
-    await pool.query("UPDATE users SET is_member = true WHERE id = $1", [
-      userId,
-    ]);
+    const queryText =
+      "UPDATE users SET is_member = true WHERE id = $1 RETURNING *";
+    const result = await pool.query(queryText, [userId]);
+
+    if (!result || result.rowCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "User not found or update failed" });
+    }
+
     res.json({ message: "Welcome to the club! You are now a member." });
   } catch (error) {
+    console.error("Database error:", error.message);
     res.status(500).json({ message: "Server error" });
   }
 });

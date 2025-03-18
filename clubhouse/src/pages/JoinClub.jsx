@@ -5,8 +5,9 @@ import { getAuthUser } from "../utils/auth";
 function JoinClub() {
   const [passcode, setPasscode] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
-  const user = getAuthUser();
+  const [user, setUser] = useState(getAuthUser());
 
   if (!user) {
     return <p>Please log in to join the club.</p>;
@@ -15,23 +16,36 @@ function JoinClub() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setError("");
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("You must be logged in to join the club.");
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:5000/api/auth/join", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ passcode }),
       });
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message);
+        throw new Error(data.message || "Failed to Join Club");
       }
 
       setMessage(data.message);
+
+      // ✅ Update user state immediately!
+      const updatedUser = { ...user, isMember: true };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+
       setTimeout(() => navigate("/"), 2000);
     } catch (err) {
       setMessage(err.message);
@@ -42,7 +56,8 @@ function JoinClub() {
     <div>
       <h2>Join the Club</h2>
       <p>Enter the secret passcode to become a member.</p>
-      {message && <p>{message}</p>}
+      {message && <p style={{ color: "green" }}>{message}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
           type="password"

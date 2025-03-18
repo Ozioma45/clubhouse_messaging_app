@@ -5,7 +5,12 @@ function Messages() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState({ title: "", content: "" });
   const [error, setError] = useState("");
-  const user = getAuthUser();
+  const [user, setUser] = useState(getAuthUser()); // Track user updates
+
+  // Re-fetch user from localStorage when the component renders
+  useEffect(() => {
+    setUser(getAuthUser());
+  }, [messages]);
 
   // Fetch messages from backend
   useEffect(() => {
@@ -64,6 +69,11 @@ function Messages() {
 
       const newMsg = await response.json();
       setMessages([...messages, newMsg]);
+
+      // Update user in local storage
+      const updatedUser = { ...user, isMember: true };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
       setNewMessage({ title: "", content: "" });
     } catch (err) {
       setError(err.message);

@@ -5,9 +5,14 @@ dotenv.config();
 
 // Middleware to verify JWT
 const verifyToken = (req, res, next) => {
-  const token = req.header("Authorization")?.split(" ")[1]; // Removes "Bearer"
+  const authHeader = req.header("Authorization");
+  if (!authHeader)
+    return res
+      .status(401)
+      .json({ message: "Access Denied. No token provided." });
 
-  if (!token) return res.status(401).json({ message: "Access Denied" });
+  const token = authHeader.split(" ")[1]; // Extract token after "Bearer"
+  if (!token) return res.status(401).json({ message: "Invalid token format" });
 
   console.log("TOKEN RECEIVED:", token);
   console.log("JWT_SECRET:", process.env.JWT_SECRET);
