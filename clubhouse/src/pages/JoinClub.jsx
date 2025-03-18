@@ -29,7 +29,7 @@ function JoinClub() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({ passcode }),
       });
@@ -40,6 +40,13 @@ function JoinClub() {
       }
 
       setMessage(data.message);
+
+      // ✅ Update the token with the new membership status
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user)); // Store updated user
+        setUser(data.user); // Update user state
+      }
 
       // ✅ Update user state immediately!
       const updatedUser = { ...user, isMember: true };

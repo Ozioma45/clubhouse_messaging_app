@@ -122,7 +122,24 @@ router.post("/join", verifyToken, async (req, res) => {
         .json({ message: "User not found or update failed" });
     }
 
-    res.json({ message: "Welcome to the club! You are now a member." });
+    const updatedUser = result.rows[0];
+
+    // ✅ Generate new token with updated membership status
+    const newToken = jwt.sign(
+      {
+        id: updatedUser.id,
+        isMember: updatedUser.is_member,
+        isAdmin: updatedUser.is_admin,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.json({
+      message: "Welcome to the club! You are now a member.",
+      token: newToken,
+      user: updatedUser, // Send updated user info
+    });
   } catch (error) {
     console.error("Database error:", error.message);
     res.status(500).json({ message: "Server error" });
