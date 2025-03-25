@@ -25,3 +25,6 @@ dist-ssr
 
 node_modules
 .env
+
+npm run dev  # Uses local database
+npm start    # Uses remote database
