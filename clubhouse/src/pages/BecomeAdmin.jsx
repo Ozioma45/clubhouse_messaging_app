@@ -5,8 +5,9 @@ import { getAuthUser } from "../utils/auth";
 function BecomeAdmin() {
   const [passcode, setPasscode] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
-  const user = getAuthUser();
+  const [user, setUser] = useState(getAuthUser());
 
   if (!user) {
     return <p>Please log in to become an admin.</p>;
@@ -15,6 +16,13 @@ function BecomeAdmin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
+    setError("");
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("You must be logged in to Become an Admin.");
+      return;
+    }
 
     try {
       const response = await fetch(
@@ -23,7 +31,7 @@ function BecomeAdmin() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: localStorage.getItem("token"),
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({ passcode }),
         }
@@ -31,10 +39,23 @@ function BecomeAdmin() {
 
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.message);
+        throw new Error(data.message || "Failed to Become an Admin");
       }
 
       setMessage(data.message);
+
+      // ✅ Update the token with the new membership status
+      if (data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user)); // Store updated user
+        setUser(data.user); // Update user state
+      }
+
+      // ✅ Update user state immediately!
+      const updatedUser = { ...user, isAdmin: true };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+
       setTimeout(() => navigate("/"), 2000);
     } catch (err) {
       setMessage(err.message);
@@ -45,7 +66,8 @@ function BecomeAdmin() {
     <div>
       <h2>Become an Admin</h2>
       <p>Enter the secret admin passcode.</p>
-      {message && <p>{message}</p>}
+      {message && <p style={{ color: "green" }}>{message}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <input
           type="password"

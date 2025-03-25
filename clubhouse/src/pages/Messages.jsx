@@ -75,6 +75,7 @@ function Messages() {
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
       setNewMessage({ title: "", content: "" });
+      location.reload();
     } catch (err) {
       setError(err.message);
     }
