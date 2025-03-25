@@ -6,6 +6,7 @@ function Messages() {
   const [newMessage, setNewMessage] = useState({ title: "", content: "" });
   const [error, setError] = useState("");
   const [user, setUser] = useState(getAuthUser()); // Track user updates
+  const API_URL = import.meta.env.VITE_API_URL;
 
   // Re-fetch user from localStorage when the component renders
   useEffect(() => {
@@ -89,7 +90,7 @@ function Messages() {
     }
 
     try {
-      await fetch(`http://localhost:5000/api/messages/${id}`, {
+      await fetch(`${API_URL}/messages/${id}`, {
         method: "DELETE",
         headers: { Authorization: localStorage.getItem("token") },
       });

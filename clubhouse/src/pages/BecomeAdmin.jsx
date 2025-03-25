@@ -8,6 +8,7 @@ function BecomeAdmin() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [user, setUser] = useState(getAuthUser());
+  const API_URL = import.meta.env.VITE_API_URL;
 
   if (!user) {
     return <p>Please log in to become an admin.</p>;
@@ -25,17 +26,14 @@ function BecomeAdmin() {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/auth/become-admin",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({ passcode }),
-        }
-      );
+      const response = await fetch(`${API_URL}/auth/become-admin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ passcode }),
+      });
 
       const data = await response.json();
       if (!response.ok) {

@@ -8,6 +8,7 @@ function JoinClub() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const [user, setUser] = useState(getAuthUser());
+  const API_URL = import.meta.env.VITE_API_URL;
 
   if (!user) {
     return <p>Please log in to join the club.</p>;
@@ -25,7 +26,7 @@ function JoinClub() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/join", {
+      const response = await fetch(`${API_URL}/api/auth/join`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
