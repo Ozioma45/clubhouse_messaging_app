@@ -1,76 +1,170 @@
-### **Clubhouse Messages App**
+# **Clubhouse Messaging App**
 
 A simple messaging platform where members can post messages, and admins can manage them.
 
----
-
-### **🚀 Features**
-
-- Users can join as **members** using a passcode.
-- **Members** can post messages.
-- **Admins** can delete messages.
-- JWT authentication for security.
+🔗 **Live Demo:** [Clubhouse Messaging App](https://clubhouse-messaging-app.vercel.app/)
 
 ---
 
-### **🛠 Tech Stack**
+## **🚀 Features**
 
-- **Frontend:** React, Vite
-- **Backend:** Node.js, Express, PostgreSQL
-- **Auth:** JWT
+✅ **User Roles:**
 
----
+- Users can **sign up and log in**.
+- Members can **post messages**.
+- Admins can **delete messages**.
 
-### **📌 Setup**
+✅ **Authentication & Security:**
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/Ozioma45/clubhouse_messaging_app.git
-   cd clubhouse_messaging_app
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Set up **.env** file (for backend):
-   ```env
-   JWT_SECRET=your_secret_key
-   MEMBERSHIP_PASSCODE=your_member_passcode
-   ADMIN_PASSCODE=your_admin_passcode
-   PORT=5000
-    DB_USER=datebase_user
-    DB_HOST=localhost
-    DB_NAME=database_name
-    DB_PASSWORD=database_password
-    DB_PORT=5432
-   ```
-4. Run the backend:
-   ```bash
-   npm start
-   ```
-5. Start the frontend:
-   ```bash
-   npm run dev
-   ```
+- JWT-based authentication.
+- Role management using **passcodes**.
+
+✅ **Fully Responsive UI**
+
+- Optimized for **mobile & desktop**.
+
+✅ **Database & Backend:**
+
+- Uses **PostgreSQL** as the database.
+- Backend built with **Node.js & Express**.
 
 ---
 
-### **🎯 Usage**
+## **🛠 Tech Stack**
 
-- **Sign up & log in** to get a token.
-- **Enter passcode** to become a member or admin.
-- **Post messages** (members only).
-- **Delete messages** (admins only).
+### **Frontend**
+
+- React (Vite)
+- React Router
+
+### **Backend**
+
+- Node.js
+- Express
+- PostgreSQL
+
+### **Authentication**
+
+- JWT (JSON Web Tokens)
 
 ---
 
-### **📌 Notes**
+## **📌 Installation & Setup**
 
-- Changes **update instantly** without needing to log out.
-- Uses `localStorage` to sync user roles.
+### **1️⃣ Clone the Repository**
+
+```bash
+git clone https://github.com/Ozioma45/clubhouse_messaging_app.git
+cd clubhouse_messaging_app
+```
+
+### **2️⃣ Install Dependencies**
+
+#### **Frontend**
+
+```bash
+cd frontend
+npm install
+```
+
+#### **Backend**
+
+```bash
+cd backend
+npm install
+```
 
 ---
 
-### **📩 Contributions & Issues**
+## **3️⃣ Setup Environment Variables**
 
-Feel free to fork, contribute, or report issues. 🚀
+### **Backend (`backend/.env`)**
+
+Create a `.env` file in the `backend` folder and add:
+
+```env
+JWT_SECRET=your_secret_key
+MEMBERSHIP_PASSCODE=your_member_passcode
+ADMIN_PASSCODE=your_admin_passcode
+PORT=5000
+
+DB_USER=your_database_user
+DB_HOST=your_database_host
+DB_NAME=your_database_name
+DB_PASSWORD=your_database_password
+DB_PORT=5432
+```
+
+For **development**, use the **local database**.  
+For **production**, update **DB_HOST** with your **Render/PostgreSQL URL**.
+
+### **Frontend (`frontend/.env`)**
+
+Create a `.env` file in the `frontend` folder and add:
+
+```env
+VITE_API_URL=http://localhost:5000/api  # Use this for local development
+```
+
+For **production**, update it with your deployed backend URL:
+
+```env
+VITE_API_URL=https://your-backend-url.com/api
+```
+
+---
+
+## **4️⃣ Run the Application**
+
+### **Backend**
+
+```bash
+cd backend
+npm start
+```
+
+### **Frontend**
+
+```bash
+cd frontend
+npm run dev
+```
+
+---
+
+## **🎯 Usage**
+
+1️⃣ **Sign up & log in** to get a token.  
+2️⃣ **Enter passcode** to become a member or admin.  
+3️⃣ **Post messages** (members only).  
+4️⃣ **Delete messages** (admins only).
+
+---
+
+## **📌 Deployment**
+
+### **Frontend (Vercel)**
+
+1. Go to [Vercel](https://vercel.com/) and create an account.
+2. Link your GitHub repository.
+3. Set **environment variables** in Vercel settings:
+   - `VITE_API_URL=https://your-backend-url.com/api`
+4. Deploy the frontend.
+
+### **Backend (Render or Railway.app)**
+
+1. Push the backend code to GitHub.
+2. Deploy on [Render](https://render.com/) or [Railway](https://railway.app/).
+3. Add **environment variables** in Render settings.
+4. Update **frontend API URL** to match the deployed backend.
+
+---
+
+## **📩 Contributions & Issues**
+
+- Feel free to fork this project and submit pull requests.
+- If you find a bug or want to request a feature, open an issue.
+
+🚀 **Happy Coding!** 🎉
+
+---
